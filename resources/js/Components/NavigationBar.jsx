@@ -19,6 +19,12 @@ export default function NavigationBar() {
                     </span>
                 </form>
 
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+                </button>
+
                 <div className="collapse navbar-collapse justify-content-md-center">
                     <ul className="navbar-nav">
                         <li className="nav-item mx-3">
