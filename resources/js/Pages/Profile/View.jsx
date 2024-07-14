@@ -6,15 +6,13 @@ import avatar from '../../Assets/avatar.png';
 import TabItem from "./Partials/TabItem";
 import Edit from "./Edit";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { PencilIcon } from "@heroicons/react/24/outline"
 
-export default function View({auth, mustVerifyEmail, status }) {
+export default function View({user, auth, mustVerifyEmail, status }) {
 
-    const user = usePage().props.auth.user;
-
+    const authUser = usePage().props.auth.user;
     const [activeTab, setActiveTab] = useState('About');
+    const isMyProfile = authUser && authUser.id == user.id
 
     return(
         <AuthenticatedLayout user={auth.user} >
@@ -30,10 +28,12 @@ export default function View({auth, mustVerifyEmail, status }) {
                             className="ml-[48px] size-[190px] -mt-[64px] rounded-full " />
                         <div className="flex justify-between items-center flex-1 p-3">
                             <h2>{ user.name }</h2>
-                            <PrimaryButton>
-                                <PencilIcon className="w-4 h-4 mr-2" />
-                                Edit Profile
-                            </PrimaryButton>
+                            {isMyProfile &&
+                                <PrimaryButton>
+                                    <PencilIcon className="w-4 h-4 mr-2" />
+                                    Edit Profile
+                                </PrimaryButton>
+                            }
                         </div>
                     </div>
                 </div>
@@ -41,9 +41,11 @@ export default function View({auth, mustVerifyEmail, status }) {
                 <div className="border-t">
                     <Tab.Group>
                         <Tab.List className="flex bg-white">
-                            <TabItem selected={activeTab === 'About'} onClick={() => setActiveTab('About')}>
-                                About
-                            </TabItem>
+                            {isMyProfile &&
+                                <TabItem selected={activeTab === 'About'} onClick={() => setActiveTab('About')}>
+                                    About
+                                </TabItem>
+                            }
 
                             <TabItem selected={activeTab === 'Posts'} onClick={() => setActiveTab('Posts')}>
                                 Posts
@@ -59,10 +61,11 @@ export default function View({auth, mustVerifyEmail, status }) {
                         </Tab.List>
 
                         <Tab.Panels className="mt-3">
-                            <Tab.Panel className="">
-                                <Edit mustVerifyEmail={mustVerifyEmail} status={status}/>
-                            </Tab.Panel>
-
+                            {isMyProfile &&
+                                <Tab.Panel>
+                                    <Edit mustVerifyEmail={mustVerifyEmail} status={status}/>
+                                </Tab.Panel>
+                            }
                             <Tab.Panel className="bg-white p-3 shadow">
                                 Posts
                             </Tab.Panel>
