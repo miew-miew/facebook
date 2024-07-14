@@ -48,7 +48,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </div>
 
                 <div>
-                    <InputLabel htmlFouserr="name" value="Username" />
+                    <InputLabel htmlFor="name" value="Username" />
 
                     <TextInput
                         id="username"
