@@ -17,7 +17,7 @@ export default function View({user, auth, mustVerifyEmail, status }) {
     return(
         <AuthenticatedLayout user={auth.user} >
             <Head title="Profile" />
-            <div className="w-[900px] mx-auto h-full overflow-auto">
+            <div className="w-[900px] mx-auto max-h-screen overflow-auto">
                 <div className="relative bg-white">
                     <img 
                         src="https://media.istockphoto.com/id/938171020/photo/book-stacking-open-book-hardback-books-on-wooden-table-and-pink-background-back-to-school-copy.jpg?s=1024x1024&w=is&k=20&c=TUeFn7g6kFBWls8ZpHOH8S9xXRz4_-2BiJI8nzCosAI=" 

@@ -10,13 +10,13 @@ export default function Home({ auth }) {
         <AuthenticatedLayout user={auth.user}>
             <Head title="Home" />
             <div className="grid lg:grid-cols-12 gap-3 p-4">
-                <div className="lg:col-span-3 lg:order-1">
-                    <div className="h-full overflow-auto max-h-screen">
+                <div className="lg:col-span-3 lg:order-1 h-full">
+                    <div className="h-full max-h-screen">
                         <GroupList />
                     </div>
                 </div>
                 <div className="lg:col-span-3 lg:order-3">
-                    <div className="h-full overflow-auto max-h-screen">
+                    <div className="h-full max-h-screen">
                         <FriendList />
                     </div>
                 </div>
@@ -30,3 +30,4 @@ export default function Home({ auth }) {
         </AuthenticatedLayout>
     );
 }
+
