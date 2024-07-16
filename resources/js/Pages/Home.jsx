@@ -7,19 +7,24 @@ import { Head } from '@inertiajs/react';
 
 export default function Home({ auth }) {
     return (
-        <AuthenticatedLayout 
-        user={auth.user}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Home" />
-            <div className='grid grid-cols-12 gap-3'>
-                <div className='col-span-3 py-6 px-3'>
-                    <GroupList/>
+            <div className="grid lg:grid-cols-12 gap-3 p-4">
+                <div className="lg:col-span-3 lg:order-1">
+                    <div className="h-full overflow-auto max-h-screen">
+                        <GroupList />
+                    </div>
                 </div>
-                <div className='col-span-6'>
-                    <CreatePost/>
-                    <PostList/>
+                <div className="lg:col-span-3 lg:order-3">
+                    <div className="h-full overflow-auto max-h-screen">
+                        <FriendList />
+                    </div>
                 </div>
-                <div className='col-span-3 py-6 px-3'>
-                    <FriendList/>
+                <div className="lg:col-span-6 lg:order-2">
+                    <div className="h-full overflow-auto max-h-screen">
+                        <CreatePost />
+                        <PostList />
+                    </div>
                 </div>
             </div>
         </AuthenticatedLayout>

@@ -13,8 +13,8 @@ export default function AuthenticatedLayout({ children }) {
     const authUser = usePage().props.auth.user;
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="bg-white p-4 shadow-md">
+        <div className="min-h-screen bg-gray-100 dark-bg-gray-900">
+            <nav className="bg-white dark-bg-gray-800 p-4 shadow-md">
                 <div className='flex items-center justify-between'>
                     <div className="flex items-center">
                         <Link href={route('home')}>

@@ -6,9 +6,9 @@ export default function FriendList(){
 
     const [search, setSearch] = useState('')
     return(
-        <div className="px-3">
-            <h2 className='text-2xl font-bold mb-4'>Friends</h2>
-            <TextInput placeholder="Type to search" value={search} onChange={(e) => setSearch(e.target.value)}/>
+        <div className="px-3 bg-white rounded border py-3">
+            <h2 className='text-xl font-bold mb-4'>Friends</h2>
+            <TextInput placeholder="Type to search" value={search} className="w-full" onChange={(e) => setSearch(e.target.value)}/>
             <div className="py-8 px-3">
                 { false ? (
                     <div className='text-gray-400 flex text-center'>

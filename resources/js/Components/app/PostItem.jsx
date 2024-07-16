@@ -1,5 +1,5 @@
 import { Disclosure } from "@headlessui/react";
-import { ArrowDownTrayIcon, ChevronRightIcon, DocumentIcon } from "@heroicons/react/24/solid";
+import { ArrowDownTrayIcon, ChatBubbleLeftRightIcon, ChevronRightIcon, DocumentIcon, HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { Link } from "@inertiajs/react";
 
 function isImage(attachement){
@@ -52,30 +52,34 @@ export default function PostItem({ post }) {
                 )}
                 </Disclosure>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
                 {post.attachements && post.attachements.map((attachement) => (
                     <div key={attachement.id} >
-                            <div className="bg-blue-100 aspect-square flex flex-col items-center justify-center text-gray-500 relative">
-                                <button className="w-8 h-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-gray-800">
+                            <div className="group bg-blue-100 aspect-square flex flex-col items-center justify-center text-gray-500 relative">
+                                {/* Download */}
+                                <button className="opacity-0 group-hover:opacity-100 size-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-gray-800">
                                     <ArrowDownTrayIcon className="w-4 h-4"/>
                                 </button>
+                                {/* Download */}
                                 {isImage(attachement) ? (
                                     <img src={attachement.url} className="object-cover aspect-square" />
                                 ) : (
                                     <div>
-                                        <DocumentIcon className="w-16 h-16"/>
-                                        {attachement.name}
+                                        <DocumentIcon className="size-12"/>
+                                        <small>{attachement.name}</small>
                                     </div>
                                 )}
                             </div>
                     </div>
                 ))}
             </div>
-            <div>
-                <button>
+            <div className="flex gap-2">
+                <button className="text-gray-800 flex gap-1 items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg py-2 px-4 flex-1">
+                    <HandThumbUpIcon className="size-6"/>
                     Like
                 </button>
-                <button>
+                <button className="text-gray-800 flex gap-1 items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg py-2 px-4 flex-1">
+                    <ChatBubbleLeftRightIcon className="size-6" />
                     Comment
                 </button>
             </div>
