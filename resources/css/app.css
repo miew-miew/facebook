@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 .max-h-screen {
-    max-height: calc(100vh - 5rem); /* Ajustez selon la hauteur de votre header, ici 4rem est un exemple */
+    max-height: calc(100vh - 6rem); /* Ajustez selon la hauteur de votre header, ici 4rem est un exemple */
 }
 
