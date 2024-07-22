@@ -6,7 +6,7 @@ export default function GroupListItems () {
 
     const [search, setSearch] = useState('')
     return (
-        <div className="hidden max-h-screen lg:flex flex-col overflow-hidden">
+        <div className="lg:flex flex-col max-h-screen overflow-hidden">
             <TextInput placeholder="Type to search" value={search} className="w-full mt-4" onChange={(e) => setSearch(e.target.value)}/>
             <div className="mt-3 h-[200px] lg:flex-1 overflow-auto">
                 { false ? (

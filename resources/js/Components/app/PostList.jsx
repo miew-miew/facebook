@@ -11,7 +11,7 @@ export default function PostList() {
 
         group: null,
 
-        attachements: [
+        attachments: [
             {
                 id: 1,
                 name: 'test.png',

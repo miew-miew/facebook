@@ -2,8 +2,8 @@ import { Disclosure } from "@headlessui/react";
 import { ArrowDownTrayIcon, ChatBubbleLeftRightIcon, ChevronRightIcon, DocumentIcon, HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { Link } from "@inertiajs/react";
 
-function isImage(attachement){
-    const mime = attachement.mime.split('/')
+function isImage(attachment){
+    const mime = attachment.mime.split('/')
     return mime[0].toLowerCase() === 'image'
 }
 
@@ -53,20 +53,20 @@ export default function PostItem({ post }) {
                 </Disclosure>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
-                {post.attachements && post.attachements.map((attachement) => (
-                    <div key={attachement.id} >
+                {post.attachments && post.attachments.map((attachment) => (
+                    <div key={attachment.id} >
                             <div className="group bg-blue-100 aspect-square flex flex-col items-center justify-center text-gray-500 relative">
                                 {/* Download */}
                                 <button className="opacity-0 group-hover:opacity-100 size-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-gray-800">
                                     <ArrowDownTrayIcon className="w-4 h-4"/>
                                 </button>
                                 {/* Download */}
-                                {isImage(attachement) ? (
-                                    <img src={attachement.url} className="object-cover aspect-square" />
+                                {isImage(attachment) ? (
+                                    <img src={attachment.url} className="object-cover aspect-square" />
                                 ) : (
                                     <div>
                                         <DocumentIcon className="size-12"/>
-                                        <small>{attachement.name}</small>
+                                        <small>{attachment.name}</small>
                                     </div>
                                 )}
                             </div>
