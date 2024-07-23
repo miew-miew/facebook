@@ -2,13 +2,15 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Tab } from "@headlessui/react";
 import { Head, usePage } from "@inertiajs/react";
 import { useState } from "react";
-import avatar from '../../Assets/avatar.png';
+import default_avatar from '../../Assets/avatar.png';
 import TabItem from "./Partials/TabItem";
 import Edit from "./Edit";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { PencilIcon } from "@heroicons/react/24/outline"
 import { CameraIcon } from "@heroicons/react/24/outline";
 import default_cover from "../../Assets/default_cover.jpg";
+import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { useForm } from '@inertiajs/react'
 
 export default function View({user, auth, mustVerifyEmail, status }) {
 
@@ -16,45 +18,87 @@ export default function View({user, auth, mustVerifyEmail, status }) {
     const authUser = usePage().props.auth.user;
     const [activeTab, setActiveTab] = useState('About');
     const isMyProfile = authUser && authUser.id === user.id;
-    function onCoverChange (e) {
-        const file = e.target.files[0]
-        if(file){
-            const reader = new FileReader()
+
+    const { data, setData, errors, post } = useForm({
+        avatar: null,
+        cover: null,
+    });
+
+    function onCoverChange(e) {
+        setData('cover', e.target.files[0]);
+        if (e.target.files[0]) {
+            const reader = new FileReader();
             reader.onload = () => {
-                setCoverImageSrc(reader.result)
-            }
-            reader.readAsDataURL(file)
+            setCoverImageSrc(reader.result);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    }
+
+    function cancelCoverImage () {
+        imagesForm.cover = null;
+        setCoverImageSrc(null);
+    }
+
+    function SubmitCoverImage() {
+        if (data.cover) {
+            post(route('profile.updateCover'))
+        } else {
+            console.log("No cover image selected");
         }
     }
 
     return(
         <AuthenticatedLayout user={auth.user} >
             <Head title="Profile" />
-            <div className="w-[900px] mx-auto max-h-screen overflow-auto">
+            <div className="max-w-[900px] mx-auto max-h-screen overflow-auto">
                 <div className="group relative bg-white">
                 <img 
                         src={coverImageSrc || user.cover_path || default_cover} 
                         className="w-full h-[200px] object-cover" /> 
-                        <label htmlFor="fileInput" className="absolute top-2 right-2 bg-gray-50 hover:bg-gray-100 text-gray-800 py-1 px-2 text-xs rounded flex items-center opacity-0 group-hover:opacity-100 cursor-pointer">
-                            <CameraIcon className="size-3 mr-2" />
-                            Update cover photo
-                        </label>
-                        <input type="file" id="fileInput" className="hidden" 
-                            onChange={onCoverChange}/>
-                    <div className="flex">
-                        <img 
-                            src={avatar} 
-                            className="ml-[48px] size-[190px] -mt-[64px] rounded-full " />
-                        <div className="flex justify-between items-center flex-1 p-3">
-                            <h2>{ user.name }</h2>
-                            {isMyProfile && (
-                                <PrimaryButton>
-                                    <PencilIcon className="size-4 mr-2" />
-                                    Edit Profile
-                                </PrimaryButton>
-                            )}
+                <div className="absolute top-2 right-2 ">
+                    {!coverImageSrc ? (
+                        <div>
+                            <label htmlFor="fileInput" className="bg-gray-50 hover:bg-gray-100 text-gray-800 py-1 px-2 text-xs rounded flex items-center opacity-0 group-hover:opacity-100 cursor-pointer">
+                                <CameraIcon className="size-3 mr-2" />
+                                Update cover photo
+                            </label>
+                            <input type="file" id="fileInput" className="hidden" 
+                                onChange={onCoverChange}/>
                         </div>
+                        
+                    ) : (
+                        <div className="flex space-x-1 opacity-0 group-hover:opacity-100">
+                            <button 
+                            className="bg-gray-50 hover:bg-gray-100 text-gray-800 py-1 px-2 text-xs rounded flex items-center cursor-pointer"
+                            onClick={cancelCoverImage}>
+                                <XMarkIcon className="size-3 mr-2" />
+                                Cancel
+                            </button>
+                            <button 
+                            className="bg-gray-800 hover:bg-gray-900 text-gray-100 py-1 px-2 text-xs rounded flex items-center cursor-pointer"
+                            onClick={SubmitCoverImage}>
+                                <CheckCircleIcon className="size-3 mr-2" />
+                                Submit
+                            </button>
+                        </div>
+                    )}
+                </div>
+                        
+                <div className="flex">
+                    <img 
+                        src={default_avatar} 
+                        className="ml-[48px] size-[190px] -mt-[64px] rounded-full " />
+                    <div className="flex justify-between items-center flex-1 p-3">
+                        <h2>{ user.name }</h2>
+                        {isMyProfile && (
+                            <PrimaryButton>
+                                <PencilIcon className="size-4 mr-2" />
+                                Edit Profile
+                            </PrimaryButton>
+                        )}
                     </div>
+                </div>
                 </div>
 
                 <div className="border-t">
