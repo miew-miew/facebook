@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AppLogo from '../Assets/facebook.svg'
+import AppLogo from '../../../public/img/facebook.svg';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';

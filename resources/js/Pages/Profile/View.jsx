@@ -2,24 +2,27 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Tab } from "@headlessui/react";
 import { Head, usePage } from "@inertiajs/react";
 import { useState } from "react";
-import default_avatar from '../../Assets/avatar.png';
+import default_avatar from '../../../../public/img/avatar.png';
 import TabItem from "./Partials/TabItem";
 import Edit from "./Edit";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { PencilIcon } from "@heroicons/react/24/outline"
 import { CameraIcon } from "@heroicons/react/24/outline";
-import default_cover from "../../Assets/default_cover.jpg";
+import default_cover from "../../../../public/img/default_cover.jpg";
 import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useForm } from '@inertiajs/react'
 
-export default function View({user, auth, mustVerifyEmail, status }) {
+export default function View({user, auth, mustVerifyEmail, status, errors }) {
 
     const [coverImageSrc, setCoverImageSrc] = useState('');
     const authUser = usePage().props.auth.user;
     const [activeTab, setActiveTab] = useState('About');
     const isMyProfile = authUser && authUser.id === user.id;
+    const [showNotification, setShowNotification] = useState(true) 
 
-    const { data, setData, errors, post } = useForm({
+    
+
+    const { data, setData, post } = useForm({
         avatar: null,
         cover: null,
     });
@@ -42,9 +45,12 @@ export default function View({user, auth, mustVerifyEmail, status }) {
 
     function SubmitCoverImage() {
         if (data.cover) {
-            post(route('profile.updateCover'))
-        } else {
-            console.log("No cover image selected");
+            post(route('profile.updateCover'), {
+                onSuccess: (user) => {
+                    console.log(user)
+                    cancelCoverImage();
+                }
+            })
         }
     }
 
@@ -52,7 +58,13 @@ export default function View({user, auth, mustVerifyEmail, status }) {
         <AuthenticatedLayout user={auth.user} >
             <Head title="Profile" />
             <div className="max-w-[900px] mx-auto max-h-screen overflow-auto">
+                {showNotification && status === 'cover-image-update' && (
+                    <div className="my-2 py-2 px-3 font-medium text-sm bg-emerald-500 text-white rounded-sm">
+                        Your cover image has been updated.
+                    </div>
+                )}
                 <div className="group relative bg-white">
+                    <pre>{JSON.stringify(errors, null, 2)}</pre>
                 <img 
                         src={coverImageSrc || user.cover_path || default_cover} 
                         className="w-full h-[200px] object-cover" /> 
