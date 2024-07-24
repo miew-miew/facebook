@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProfileController extends Controller
@@ -20,6 +21,7 @@ class ProfileController extends Controller
         return Inertia::render('Profile/View', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
+            'success' => session('success'),
             'user' => new UserResource($user),
         ]);
     }
@@ -44,7 +46,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return redirect()->route('profile', $request->user()->username);
     }
 
     /**
@@ -72,7 +74,7 @@ class ProfileController extends Controller
     public function updateImage(Request $request) 
     {
         $data = $request->validate([
-            'cover' => ['nullable', 'image', 'mimes:png,jpg'],
+            'cover' => ['nullable', 'image'],
             'avatar' => ['nullable', 'image'],
         ]);
 
@@ -81,13 +83,28 @@ class ProfileController extends Controller
         $avatar = $data['avatar'] ?? null;
         /** @var UploadedFile $cover */
         $cover = $data['cover'] ?? null;
+        $success = '';
 
         if($cover){
-            $path = $cover->store('avatars/'.$user->id, 'public'); // Sauvegarde de l'image de couverture dans le stockage public avec un chemin spécifique à l'user
+            if($user->cover_path){
+                Storage::disk('public')->delete($user->cover_path);
+            }
+            $path = $cover->store('user-'.$user->id, 'public'); // Sauvegarde de l'image de couverture dans le stockage public avec un chemin spécifique à l'user
             $user->update(['cover_path' => $path]); // Mise à jour du chemin de l'image de couverture dans la base de données
+            $success = 'Your cover image has been updated';
         }
-        session('success', 'Cover image has been updated');
+        
+        if($avatar){
+            if($user->avatar_path){
+                Storage::disk('public')->delete($user->avatar_path);
+            }
+            $path = $avatar->store('user-'.$user->id, 'public'); // Sauvegarde de l'image de couverture dans le stockage public avec un chemin spécifique à l'user
+            $user->update(['avatar_path' => $path]); // Mise à jour du chemin de l'image de couverture dans la base de données
+            $success = 'Your avatar image has been updated';
+        }
 
-        return back()->with('status', 'cover-image-update');
+        // session('success', 'Cover image has been updated');
+
+        return back()->with('success', $success);
     }
 }
