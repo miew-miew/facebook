@@ -68,10 +68,11 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
+    // Méthode pour mettre à jour l'image de couverture et l'avatar de l'utilisateur
     public function updateImage(Request $request) 
     {
         $data = $request->validate([
-            'cover' => ['nullable', 'image'],
+            'cover' => ['nullable', 'image', 'mimes:png,jpg'],
             'avatar' => ['nullable', 'image'],
         ]);
 
@@ -82,8 +83,8 @@ class ProfileController extends Controller
         $cover = $data['cover'] ?? null;
 
         if($cover){
-            $path = $cover->store('avatars/'.$user->id, 'public');
-            $user->update(['cover_path' => $path]);
+            $path = $cover->store('avatars/'.$user->id, 'public'); // Sauvegarde de l'image de couverture dans le stockage public avec un chemin spécifique à l'user
+            $user->update(['cover_path' => $path]); // Mise à jour du chemin de l'image de couverture dans la base de données
         }
         session('success', 'Cover image has been updated');
 

@@ -1,8 +1,8 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Tab } from "@headlessui/react";
 import { Head, usePage } from "@inertiajs/react";
-import { useState } from "react";
-import default_avatar from '../../../../public/img/avatar.png';
+import { useState, useCallback } from "react";
+import default_avatar from '../../../../public/img/default_avatar.png';
 import TabItem from "./Partials/TabItem";
 import Edit from "./Edit";
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -17,10 +17,15 @@ export default function View({user, auth, mustVerifyEmail, status, errors }) {
     const [coverImageSrc, setCoverImageSrc] = useState('');
     const authUser = usePage().props.auth.user;
     const [activeTab, setActiveTab] = useState('About');
-    const isMyProfile = authUser && authUser.id === user.id;
-    const [showNotification, setShowNotification] = useState(true) 
+    const isMyProfile = authUser && authUser.id === user.id; // Vérification si l'utilisateur authentifié est le propriétaire du profil.
+    const [showNotification, setShowNotification] = useState(true);
 
-    
+    // Fonction pour masquer la notification après 3 secondes.
+    const hideNotification = useCallback(() => {
+        setTimeout(() => {
+            setShowNotification(false);
+        }, 3000);
+    }, [setShowNotification]);
 
     const { data, setData, post } = useForm({
         avatar: null,
@@ -39,7 +44,7 @@ export default function View({user, auth, mustVerifyEmail, status, errors }) {
     }
 
     function cancelCoverImage () {
-        imagesForm.cover = null;
+        data.cover = null;
         setCoverImageSrc(null);
     }
 
@@ -49,6 +54,7 @@ export default function View({user, auth, mustVerifyEmail, status, errors }) {
                 onSuccess: (user) => {
                     console.log(user)
                     cancelCoverImage();
+                    hideNotification();
                 }
             })
         }
@@ -63,8 +69,12 @@ export default function View({user, auth, mustVerifyEmail, status, errors }) {
                         Your cover image has been updated.
                     </div>
                 )}
+                {errors.cover && (
+                    <div className="my-2 py-2 px-3 font-medium text-sm bg-red-400 text-white rounded-sm">
+                        {errors.cover}
+                    </div>
+                )}
                 <div className="group relative bg-white">
-                    <pre>{JSON.stringify(errors, null, 2)}</pre>
                 <img 
                         src={coverImageSrc || user.cover_path || default_cover} 
                         className="w-full h-[200px] object-cover" /> 
@@ -102,7 +112,7 @@ export default function View({user, auth, mustVerifyEmail, status, errors }) {
                         src={default_avatar} 
                         className="ml-[48px] size-[190px] -mt-[64px] rounded-full " />
                     <div className="flex justify-between items-center flex-1 p-3">
-                        <h2>{ user.name }</h2>
+                        <h2 className="text-3xl">{ user.name }</h2>
                         {isMyProfile && (
                             <PrimaryButton>
                                 <PencilIcon className="size-4 mr-2" />

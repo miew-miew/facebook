@@ -40,7 +40,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                         required
-                        isFocused
                         autoComplete="name"
                     />
 
@@ -56,7 +55,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         value={data.username}
                         onChange={(e) => setData('username', e.target.value)}
                         required
-                        isFocused
                         autoComplete="username"
                     />
 
