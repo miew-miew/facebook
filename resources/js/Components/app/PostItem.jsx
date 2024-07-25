@@ -12,7 +12,7 @@ export default function PostItem({ post }) {
         <div className="bg-white border rounded p-4 mb-3">
             <div className="flex items-center gap-2 mb-3">
                 <Link>
-                    <img src={post.user.avatar} className="w-[40px] rounded-full border-2 hover:border-blue-500" />
+                    <img src={post.user.avatar_path} className="w-[40px] rounded-full border-2 hover:border-blue-500" />
                 </Link>
                 <div>
                     <div className="flex items-center">
@@ -37,19 +37,24 @@ export default function PostItem({ post }) {
             </div>
             <div className="mb-3">
                 <Disclosure>
-                {({ open }) => (
-                    <div>
-                        {!open && <div dangerouslySetInnerHTML={{ __html: post.body.substring(0, 200) }} />}
-                        <Disclosure.Panel>
-                            <div dangerouslySetInnerHTML={{ __html: post.body }} />
-                        </Disclosure.Panel>
-                        <div className="flex justify-end">
-                            <Disclosure.Button className="text-blue-500 hover:underline">
-                                {open ? 'Read less' : 'Read more'}
-                            </Disclosure.Button>
+                    {({ open }) => (
+                        <div>
+                            {!open && post.content.length > 200 ? (
+                                <div dangerouslySetInnerHTML={{ __html: post.content.substring(0, 200) }} />
+                            ) : (
+                                <Disclosure.Panel>
+                                    <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                                </Disclosure.Panel>
+                            )}
+                            {post.content.length > 200 && (
+                                <div className="flex justify-end">
+                                    <Disclosure.Button className="text-blue-500 hover:underline">
+                                        {open ? 'Read less' : 'Read more'}
+                                    </Disclosure.Button>
+                                </div>
+                            )}
                         </div>
-                    </div>
-                )}
+                    )}
                 </Disclosure>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-3">

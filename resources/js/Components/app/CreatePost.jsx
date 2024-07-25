@@ -6,13 +6,21 @@ import { useForm } from "@inertiajs/react";
 
 export default function CreatePost() {
     const [postCreating, setPostCreating] = useState(false);
-    const { data, setData, errors } = useForm({
-        body: ''
+    const { data, setData, post, errors } = useForm({
+        content: ''
     });
 
     const handleTextareaChange = (e) => {
-        setData('body', e.target.value);
+        setData('content', e.target.value);
     };
+
+    function submit() {
+        post(route('post.create'), {
+            onSuccess: () => {
+                data.reset()
+            }
+        })
+    }
 
     return(
         <div className="p-4 bg-white rounded-lg border mb-3 ">
@@ -20,20 +28,24 @@ export default function CreatePost() {
                 className="mb-3 w-full"
                 placeholder="Click here to create a new post"
                 rows="1"
-                value={data.body}
+                value={data.content}
                 onChange={handleTextareaChange}
                 onClick={() => setPostCreating(true)}/>
-                <div>
-                    {data.body}
-                </div>
             { postCreating && (
                 <div className="flex">
-                    <label htmlFor="fileInput" className="flex flex-1 justify-center items-center gap-1 hover:bg-gray-200 p-2 rounded-md cursor-pointer">
+                    <button 
+                        type="button"
+                        onClick={() => document.getElementById('fileInput').click()}
+                        className="flex flex-1 justify-center items-center gap-1 hover:bg-gray-200 p-2 rounded-md cursor-pointer">
                         <PhotoIcon className="h-6 w-6 text-green-600" />
                         Photo / video
-                    </label>
+                    </button>
                     <input type="file" id="fileInput" className="hidden" />
-                    <button className="flex flex-1 justify-center items-center gap-1 hover:bg-gray-200 rounded-md cursor-pointer">
+
+                    <button
+                        type="submit"
+                        onClick={submit}
+                        className="flex flex-1 justify-center items-center gap-1 hover:bg-gray-200 rounded-md cursor-pointer">
                         <CheckCircleIcon className="size-6 text-emerald-500" />
                         Submit
                     </button>

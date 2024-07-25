@@ -1,6 +1,6 @@
 import PostItem from "./PostItem";
 
-export default function PostList() {
+export default function PostList({ posts }) {
 
     const post1 = {
         user: {
@@ -32,7 +32,7 @@ export default function PostList() {
             }
         ],
 
-        body: "<p> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse provident quidem accusantium ipsum placeat saepe blanditiis facere amet id quae quo eligendi nisi sit similique dignissimos repellendus sequi, quaerat exercitationem assumenda? Quo molestiae atque magni provident obcaecati, vel officia beatae autem, molestias consectetur aut expedita nesciunt quam iusto, dolorum asperiores. </p>",
+        content: "<p> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse provident quidem accusantium ipsum placeat saepe blanditiis facere amet id quae quo eligendi nisi sit similique dignissimos repellendus sequi, quaerat exercitationem assumenda? Quo molestiae atque magni provident obcaecati, vel officia beatae autem, molestias consectetur aut expedita nesciunt quam iusto, dolorum asperiores. </p>",
 
         created_at: '2024-07-15 10:54'
     }
@@ -49,15 +49,16 @@ export default function PostList() {
             name: 'Laravel Developers'
         },
 
-        body: "<p> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse provident quidem accusantium ipsum placeat saepe blanditiis facere amet id quae quo eligendi nisi sit similique dignissimos repellendus sequi, quaerat exercitationem assumenda? Quo molestiae atque magni provident obcaecati, vel officia beatae autem, molestias consectetur aut expedita nesciunt quam iusto, dolorum asperiores. </p>",
+        content: "<p> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse provident quidem accusantium ipsum placeat saepe blanditiis facere amet id quae quo eligendi nisi sit similique dignissimos repellendus sequi, quaerat exercitationem assumenda? Quo molestiae atque magni provident obcaecati, vel officia beatae autem, molestias consectetur aut expedita nesciunt quam iusto, dolorum asperiores. </p>",
 
         created_at: '2024-07-15 13:14'
     }
 
     return(
         <div>
-            <PostItem post={post1}/>
-            <PostItem post={post2}/>
+            {posts.map((post) => (
+                <PostItem key={post.id} post={post} />
+            ))}
         </div>
     )
 }

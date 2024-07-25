@@ -23,7 +23,7 @@ export default function Home({ auth, posts }) {
                 <div className="lg:col-span-6 lg:order-2">
                     <div className="h-full overflow-auto max-h-screen">
                         <CreatePost />
-                        <PostList />
+                        <PostList posts={posts.data}/>
                     </div>
                 </div>
             </div>
