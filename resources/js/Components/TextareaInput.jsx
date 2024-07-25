@@ -1,18 +1,20 @@
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
-export default forwardRef(function TextareaInput({ className = '', value, onChange, placeholder, isFocused = false, ...props }, ref) {
+export default forwardRef(function TextareaInput({ className = '', value, onChange, placeholder, autoResize = true, isFocused = false, ...props }, ref) {
     const input = ref ? ref : useRef();
 
     useEffect(() => {
         if (isFocused) {
             input.current.focus();
         }
-    }, []);
+    }, [isFocused]);
 
     const onInputChange = (e) => {
-        onChange(e.target.value);
-        input.current.style.height = 'auto';
-        input.current.style.height = input.current.scrollHeight + 'px';
+        onChange(e); // Pass the event object
+        if (autoResize) {
+            input.current.style.height = 'auto';
+            input.current.style.height = input.current.scrollHeight + 'px';
+        }
     };
 
     return (

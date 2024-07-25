@@ -2,13 +2,16 @@ import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { PhotoIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
 import TextareaInput from "../TextareaInput";
+import { useForm } from "@inertiajs/react";
 
 export default function CreatePost() {
     const [postCreating, setPostCreating] = useState(false);
-    const [newPost, setNewPost] = useState({ body: '' });
+    const { data, setData, errors } = useForm({
+        body: ''
+    });
 
-    const handleTextareaChange = (value) => {
-        setNewPost({ body: value });
+    const handleTextareaChange = (e) => {
+        setData('body', e.target.value);
     };
 
     return(
@@ -17,11 +20,11 @@ export default function CreatePost() {
                 className="mb-3 w-full"
                 placeholder="Click here to create a new post"
                 rows="1"
-                value={newPost.body}
+                value={data.body}
                 onChange={handleTextareaChange}
                 onClick={() => setPostCreating(true)}/>
                 <div>
-                    {newPost.body}
+                    {data.body}
                 </div>
             { postCreating && (
                 <div className="flex">
