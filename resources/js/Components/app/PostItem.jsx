@@ -1,5 +1,5 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import {
   ArrowDownTrayIcon,
   ChatBubbleLeftRightIcon,
@@ -11,6 +11,8 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "@inertiajs/react";
+import PostModal from "./PostModal";
+import PostUserHeader from "./PostUserHeader";
 
 function isImage(attachment) {
   const mime = attachment.mime.split('/');
@@ -18,34 +20,22 @@ function isImage(attachment) {
 }
 
 export default function PostItem({ post }) {
+
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  function openModal() {
+    setShowEditModal(true);
+  }
+
+  function closeModal() {
+    setShowEditModal(false);
+  }
+
   return (
-    <div className="bg-white border rounded p-4 mb-3">
+  <div>
+      <div className="bg-white border rounded p-4 mb-3">
       <div className="flex items-center justify-between gap-2 mb-3">
-        <div className="flex items-center">
-          <Link>
-            <img src={post.user.avatar_path} className="w-[40px] rounded-full border-2 hover:border-blue-500" />
-          </Link>
-          <div>
-            <div className="flex items-center">
-              <h4 className="font-bold mr-1 hover:underline">
-                <Link>
-                  {post.user.name}
-                </Link>
-              </h4>
-              {post.group && (
-                <div className="flex items-center">
-                  <ChevronRightIcon className="w-4 h-4 text-gray-900" />
-                  <h4 className="font-bold mr-1 hover:underline">
-                    <Link>
-                      {post.group.name}
-                    </Link>
-                  </h4>
-                </div>
-              )}
-            </div>
-            <small className="text-gray-400">{post.created_at}</small>
-          </div>
-        </div>
+        <PostUserHeader post={post} />
         <div className="justify-self-end">
           <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -70,6 +60,7 @@ export default function PostItem({ post }) {
                         className={`${
                           active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                         } group flex items-center w-full px-2 py-2 text-sm`}
+                        onClick={openModal}
                       >
                         <PencilSquareIcon className="w-5 h-5 mr-2" aria-hidden="true" />
                         Edit
@@ -151,6 +142,8 @@ export default function PostItem({ post }) {
           Comment
         </button>
       </div>
-    </div>
+      </div>
+      <PostModal post={post} isOpen={showEditModal} onClose={closeModal} />
+  </div>
   );
 }
