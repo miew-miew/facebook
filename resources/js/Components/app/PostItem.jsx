@@ -10,7 +10,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import { Link } from "@inertiajs/react";
+import { Link, router, useForm } from "@inertiajs/react";
 import PostModal from "./PostModal";
 import PostUserHeader from "./PostUserHeader";
 
@@ -29,6 +29,14 @@ export default function PostItem({ post }) {
 
   function closeModal() {
     setShowEditModal(false);
+  }
+
+  function deletePost() {
+    if(window.confirm('Are you sure you want to delete this post?')){
+      router.delete(route('post.destroy', post), {
+        preserveScroll: true
+      })
+    }
   }
 
   return (
@@ -73,6 +81,7 @@ export default function PostItem({ post }) {
                         className={`${
                           active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                         } group flex items-center w-full px-2 py-2 text-sm`}
+                        onClick={deletePost}
                       >
                         <TrashIcon className="w-5 h-5 mr-2" aria-hidden="true" />
                         Delete
