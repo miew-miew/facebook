@@ -26,7 +26,7 @@ function PostUserHeader ({ post, showTime = true }) {
                     )}
                     </div>
                     {showTime && (
-                        <small className="text-gray-400">{post.created_at}</small>
+                        <small className="text-gray-400">{post.updated_at}</small>
                     )}
                 </div>
             </div>

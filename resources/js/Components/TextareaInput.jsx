@@ -9,13 +9,21 @@ export default forwardRef(function TextareaInput({ className = '', value, onChan
         }
     }, [isFocused]);
 
-    const onInputChange = (e) => {
-        onChange(e); // Pass the event object
+    function adjustHeight () {
         if (autoResize) {
             input.current.style.height = 'auto';
             input.current.style.height = input.current.scrollHeight + 'px';
         }
+    }
+
+    const onInputChange = (e) => {
+        onChange(e); // Pass the event object
+        adjustHeight()
     };
+
+    useEffect(() => {
+        adjustHeight()
+    }, [])
 
     return (
         <textarea

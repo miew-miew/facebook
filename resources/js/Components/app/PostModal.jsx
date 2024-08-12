@@ -25,6 +25,7 @@ useEffect(() => {
 
   function submit() {
     form.put(route('post.update', post), {
+      preservedScroll:true,
       onSuccess: () => closeModal(),
     });
   }
