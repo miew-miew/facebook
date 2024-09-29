@@ -1,9 +1,9 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import {isImage} from '../../helpers.js';
 import {
   ArrowDownTrayIcon,
   ChatBubbleLeftRightIcon,
-  ChevronRightIcon,
   DocumentIcon,
   EllipsisVerticalIcon,
   HandThumbUpIcon,
@@ -13,11 +13,6 @@ import {
 import { Link, router, useForm } from "@inertiajs/react";
 import PostModal from "./PostModal";
 import PostUserHeader from "./PostUserHeader";
-
-function isImage(attachment) {
-  const mime = attachment.mime.split('/');
-  return mime[0].toLowerCase() === 'image';
-}
 
 export default function PostItem({ post }) {
 

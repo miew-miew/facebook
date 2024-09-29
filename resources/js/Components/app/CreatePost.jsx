@@ -1,9 +1,6 @@
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
-import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useForm, usePage } from "@inertiajs/react";
 import PostModal from "./PostModal";
-import TextInput from "../TextInput";
 
 export default function CreatePost() {
     const authUser = usePage().props.auth.user;
@@ -34,7 +31,7 @@ export default function CreatePost() {
             >
                 Click here to create a new post
             </div>
-            {/* Commenté pour l'instant. Décommentez si nécessaire.
+            {/* 
             <div className="flex mt-3">
                 <button 
                     type="button"

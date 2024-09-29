@@ -30,12 +30,13 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
+            <h1 className='text-xl flex justify-center font-bold mb-2'>Register a new account</h1>
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput
                         id="name"
+                        placeholder="Name"
                         name="name"
                         value={data.name}
                         className="mt-1 block w-full"
@@ -49,10 +50,10 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput
                         id="email"
+                        placeholder="Email"
                         type="email"
                         name="email"
                         value={data.email}
@@ -66,10 +67,10 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
 
                     <TextInput
                         id="password"
+                        placeholder="Password"
                         type="password"
                         name="password"
                         value={data.password}
@@ -83,10 +84,10 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
 
                     <TextInput
                         id="password_confirmation"
+                        placeholder="Confirm Password"
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
@@ -99,17 +100,19 @@ export default function Register() {
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
+                <PrimaryButton className="w-full flex justify-center mt-3" disabled={processing}>
+                    Register
+                </PrimaryButton>
+
+                <div className="flex items-center justify-center mt-2 space-x-2">
+                    <p className='text-sm text-gray-600'>Already registered?</p>
                     <Link
                         href={route('login')}
-                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="text-sm text-blue-600 hover:text-blue-800"
                     >
-                        Already registered?
+                        Login here
                     </Link>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
                 </div>
             </form>
         </GuestLayout>
