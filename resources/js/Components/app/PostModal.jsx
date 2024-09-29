@@ -48,16 +48,15 @@ export default function PostModal({ post, isOpen, onClose }) {
   async function attachFile(e) {
     const files = Array.from(e.target.files);
     const attachedFiles = await Promise.all(files.map(async (file) => {
-      const src = await readFile(file);
-      return { file, src };
+      const url = await readFile(file);
+      return { file, url };
     }));
     setAttachmentFiles(prev => [...prev, ...attachedFiles]);
   }
-  console.log(attachmentFiles)
 
   async function readFile(file) {
     return new Promise((resolve, reject) => {
-      if (isImage({mime: file.type})) {
+      if (isImage(file)) {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = reject;
@@ -117,20 +116,16 @@ export default function PostModal({ post, isOpen, onClose }) {
                   />
 
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
-                    {post.attachments && post.attachments.map((attachment) => (
-                      <div key={attachment.id}>
+                    {attachmentFiles.map((attachedFiles, index) => (
+                      <div key={index}>
                         <div className="group bg-blue-100 aspect-square flex flex-col items-center justify-center text-gray-500 relative">
-                          {/* Download */}
-                          <button className="opacity-0 group-hover:opacity-100 size-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-gray-800">
-                            <ArrowDownTrayIcon className="w-4 h-4" />
-                          </button>
-                          {/* Display attachment */}
-                          {isImage(attachment.url) ? (
-                            <img src={attachment.url} className="object-cover aspect-square" alt={attachment.name} />
+                          {/* Display attachedFiles */}
+                          {isImage(attachedFiles.file) ? (
+                            <img src={attachedFiles.url} className="object-cover aspect-square" alt={attachedFiles.name} />
                           ) : (
                             <div>
                               <DocumentIcon className="size-12" />
-                              <small>{attachment.name}</small>
+                              <small>{attachedFiles.name}</small>
                             </div>
                           )}
                         </div>
