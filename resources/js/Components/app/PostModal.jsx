@@ -1,33 +1,50 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useState } from 'react';
-import TextareaInput from '../TextareaInput';
+import { Fragment, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 import PostUserHeader from './PostUserHeader';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { ClassicEditor, Bold, Essentials, Italic, Paragraph } from 'ckeditor5';
+import 'ckeditor5/ckeditor5.css';
 
 export default function PostModal({ post, isOpen, onClose }) {
-  const [content, setContent] = useState(post.content);
-  
   const form = useForm({
-    id: post.id,
-    content: post.content, // Initialisez avec le contenu du post
-});
+    id: post.id || null,
+    content: post.content || '', // Initialisez avec le contenu du post ou une chaîne vide
+  });
 
-// Utilise un useEffect pour mettre à jour le formulaire quand le contenu change
-useEffect(() => {
-    form.setData('content', content);
-}, [content]);
-
+  useEffect(() => {
+    if (isOpen) {
+      // Mettre à jour les données du formulaire quand le modal s'ouvre
+      form.setData('id', post.id);
+      form.setData('content', post.content || '');
+    }
+  }, [isOpen, post]); // Exécutez l'effet quand le modal s'ouvre ou quand le post change
 
   function closeModal() {
     onClose();
   }
 
+  function handleChange(event, editor) {
+    const data = editor.getData();
+    form.setData('content', data); // Mettez à jour le contenu dans le formulaire
+  }
+
   function submit() {
-    form.put(route('post.update', post), {
-      preservedScroll:true,
-      onSuccess: () => closeModal(),
-    });
+    if (form.data.id) {
+      form.put(route('post.update', form.data.id), {
+        preservedScroll: true,
+        onSuccess: () => {
+          closeModal();
+        },
+      });
+    } else {
+      form.post(route('post.create'), {
+        onSuccess: () => {
+          closeModal();
+        },
+      });
+    }
   }
 
   return (
@@ -62,17 +79,21 @@ useEffect(() => {
                     as="h3"
                     className="flex items-center justify-between py-3 px-4 font-medium bg-gray-100 text-gray-900"
                   >
-                    Update Post
+                    {form.data.id ? 'Update Post' : 'Create Post'}
                     <button onClick={closeModal} className="size-8 rounded-full hover:bg-black/10 transition flex items-center justify-center">
                       <XMarkIcon className="size-5" />
                     </button>
                   </Dialog.Title>
-                  <div className="p-4 mt-2">
+                  <div className="p-4 mt-2 space-y-2">
                     <PostUserHeader post={post} showTime={false} />
-                    <TextareaInput
-                      className="mt-4 w-full"
-                      value={content}
-                      onChange={(e) => setContent(e.target.value)}
+                    <CKEditor
+                      editor={ClassicEditor}
+                      data={form.data.content}
+                      onChange={handleChange} 
+                      config={{
+                        plugins: [Essentials, Bold, Italic, Paragraph],
+                        toolbar: ['undo', 'redo', '|', 'bold', 'italic'],
+                      }}
                     />
                   </div>
 
