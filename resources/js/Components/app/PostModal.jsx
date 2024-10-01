@@ -20,6 +20,10 @@ export default function PostModal({ post, isOpen, onClose }) {
       // Update form data when modal opens
       form.setData('id', post.id);
       form.setData('content', post.content || '');
+
+      if(!post.id){
+        setAttachmentFiles([])
+      }
     }
   }, [isOpen, post]);
 
