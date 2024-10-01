@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import PostUserHeader from './PostUserHeader';
-import { BookmarkIcon, PaperClipIcon, XMarkIcon, ArrowDownTrayIcon, DocumentIcon } from '@heroicons/react/24/solid';
+import { BookmarkIcon, PaperClipIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { ClassicEditor, Bold, Essentials, Italic, Paragraph } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
@@ -33,39 +33,48 @@ export default function PostModal({ post, isOpen, onClose }) {
   }
 
   function submit() {
+    // Fonction de soumission du formulaire
     if (form.data.id) {
+      // Si l'ID existe, mettre à jour le post
       form.put(route('post.update', form.data.id), {
-        preservedScroll: true,
-        onSuccess: closeModal,
+        preservedScroll: true, // Préserve le défilement après la soumission
+        onSuccess: closeModal, // Ferme le modal en cas de succès
       });
     } else {
+      // Sinon, créer un nouveau post
       form.post(route('post.create'), {
-        onSuccess: closeModal,
+        onSuccess: closeModal, // Ferme le modal en cas de succès
       });
     }
   }
 
   async function attachFile(e) {
-    const files = Array.from(e.target.files);
-    const attachedFiles = await Promise.all(files.map(async (file) => {
-      const url = await readFile(file);
-      return { file, url };
+    const files = Array.from(e.target.files); // Conversion des fichiers sélectionnés en tableau
+    const attachedFile = await Promise.all(files.map(async (file) => {
+      const url = await readFile(file); // Lit chaque fichier pour obtenir son URL
+      return { file, url }; // Retourne un objet contenant le fichier et son URL
     }));
-    setAttachmentFiles(prev => [...prev, ...attachedFiles]);
+    setAttachmentFiles(prev => [...prev, ...attachedFile]); // Met à jour l'état des fichiers joints
   }
 
   async function readFile(file) {
+    // Fonction pour lire le fichier et retourner son URL
     return new Promise((resolve, reject) => {
       if (isImage(file)) {
+        // Vérifie si le fichier est une image
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result); // Résout avec l'URL de l'image
+        reader.onerror = reject; // Rejette en cas d'erreur
+        reader.readAsDataURL(file); // Lit le fichier comme une URL de données
       } else {
-        resolve(null);
+        resolve(null); // Si ce n'est pas une image, retourne null
       }
     });
   }
+
+  function removeFile(attachedFileToRemove) {
+    setAttachmentFiles(prev => prev.filter(attachedFile => attachedFile.file !== attachedFileToRemove.file));
+  }  
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -115,17 +124,25 @@ export default function PostModal({ post, isOpen, onClose }) {
                     }}
                   />
 
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
-                    {attachmentFiles.map((attachedFiles, index) => (
+                  <div className="grid grid-cols-2 gap-3 my-3">
+                    {attachmentFiles.map((attachedFile, index) => (
                       <div key={index}>
-                        <div className="group bg-blue-100 aspect-square flex flex-col items-center justify-center text-gray-500 relative">
-                          {/* Display attachedFiles */}
-                          {isImage(attachedFiles.file) ? (
-                            <img src={attachedFiles.url} className="object-cover aspect-square" alt={attachedFiles.name} />
-                          ) : (
+                        <div className="group aspect-square bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative">
+                          <button 
+                          onClick={() => removeFile(attachedFile)}
+                          className="absolute right-1 top-1 size-7 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white rounded-full"
+                          >
+                              <XMarkIcon className="size-5" />
+                          </button>
+                          {/* Display attachedFile */}
+                          {isImage(attachedFile.file) ? (
                             <div>
-                              <DocumentIcon className="size-12" />
-                              <small>{attachedFiles.name}</small>
+                              <img src={attachedFile.url} className="object-cover aspect-square" />
+                            </div>
+                          ) : (
+                            <div className='w-full h-full flex flex-col items-center justify-center'>
+                              <PaperClipIcon className="size-10 mb-3" />
+                              <small>{attachedFile.file.name}</small>
                             </div>
                           )}
                         </div>
