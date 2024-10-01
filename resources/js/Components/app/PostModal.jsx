@@ -125,15 +125,23 @@ export default function PostModal({ post, isOpen, onClose }) {
                   />
 
                   <div className="grid grid-cols-2 gap-3 my-3">
-                    {attachmentFiles.map((attachedFile, index) => (
+                    {attachmentFiles.slice(0,4).map((attachedFile, index) => (
                       <div key={index}>
                         <div className="group aspect-square bg-blue-100 flex flex-col items-center justify-center text-gray-500 relative">
+                          
+                          {index === 3 && attachmentFiles.length > 4 && (
+                            <div className='absolute left-0 top-0 right-0 bottom-0 z-10 bg-black/30 text-white flex items-center justify-center'>
+                              +{attachmentFiles.length - 4} more
+                            </div>
+                          )}
+
                           <button 
                           onClick={() => removeFile(attachedFile)}
-                          className="absolute right-1 top-1 size-7 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white rounded-full"
+                          className="absolute z-20 right-1 top-1 size-7 flex items-center justify-center bg-black/30 hover:bg-black/20 text-white rounded-full text-2xl"
                           >
                               <XMarkIcon className="size-5" />
                           </button>
+
                           {/* Display attachedFile */}
                           {isImage(attachedFile.file) ? (
                             <div>
