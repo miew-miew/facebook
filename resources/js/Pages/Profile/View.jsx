@@ -1,7 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Tab } from "@headlessui/react";
 import { Head, usePage } from "@inertiajs/react";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import default_avatar from '../../../../public/img/default_avatar.png';
 import TabItem from "./Partials/TabItem";
 import Edit from "./Edit";

@@ -12,6 +12,7 @@ export default function PostModal({ post, isOpen, onClose }) {
   const form = useForm({
     id: post.id || null,
     content: post.content || '', // Initialize with post content or an empty string
+    attachments: []
   });
   const [attachmentFiles, setAttachmentFiles] = useState([]);
 
@@ -36,18 +37,23 @@ export default function PostModal({ post, isOpen, onClose }) {
     form.setData('content', data); // Update content in the form
   }
 
+  console.log(attachmentFiles)
+
   function submit() {
+    const attachmentFile = attachmentFiles.map(attachedFile => attachedFile.file)
+    form.setData('attachments', attachmentFile);
+    console.log('Form data before submit:', form.data);
     // Fonction de soumission du formulaire
     if (form.data.id) {
       // Si l'ID existe, mettre à jour le post
       form.put(route('post.update', form.data.id), {
-        preservedScroll: true, // Préserve le défilement après la soumission
-        onSuccess: closeModal, // Ferme le modal en cas de succès
+        preservedScroll: true, 
+        onSuccess: closeModal, 
       });
     } else {
       // Sinon, créer un nouveau post
       form.post(route('post.create'), {
-        onSuccess: closeModal, // Ferme le modal en cas de succès
+        onSuccess: closeModal, 
       });
     }
   }
@@ -58,6 +64,7 @@ export default function PostModal({ post, isOpen, onClose }) {
       const url = await readFile(file); // Lit chaque fichier pour obtenir son URL
       return { file, url }; // Retourne un objet contenant le fichier et son URL
     }));
+
     setAttachmentFiles(prev => [...prev, ...attachedFile]); // Met à jour l'état des fichiers joints
   }
 
